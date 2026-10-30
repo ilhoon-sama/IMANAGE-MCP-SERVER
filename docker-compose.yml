@@ -1,0 +1,80 @@
+services:
+  # --------------------------------------------------------------------------
+  # 1. iManage On-Prem MCP 서버 컨테이너
+  # --------------------------------------------------------------------------
+  imanage-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: imanage-mcp
+    hostname: imanage-mcp-server
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Seoul
+      - MCP_HTTP_PORT=3001
+      # 컨테이너 재생성 시에도 .env 암호문(enc:...) 및 OAuth 토큰이 유지되도록 고정 솔트/키 경로 지정
+      - MCP_MACHINE_SALT=imanage_mcp_prod_salt
+      - MCP_SECRET_KEY_PATH=/app/data/.imanage-mcp-secret.key
+    volumes:
+      # .env 파일을 바인드 마운트하여 평문 비밀번호 입력 시 자동 암호화(enc:...)가 호스트 파일에도 반영되도록 설정
+      - ./.env:/app/.env
+      # 암호화 마스터 키 영구 보관 폴더
+      - ./data:/app/data
+      # 다운로드 문서 저장 폴더
+      - ./downloads:/app/downloads
+    ports:
+      # 호스트 서버 내부(127.0.0.1)에서도 직접 상태 확인 가능하도록 바인딩
+      - "127.0.0.1:3001:3001"
+    networks:
+      - mcp-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  # --------------------------------------------------------------------------
+  # 2. Nginx SSL(HTTPS) 통합 게이트웨이 (80 / 443 포트)
+  #    - ./docker/certs 폴더에 fullchain.pem, privkey.pem 인증서 배치 후 사용
+  # --------------------------------------------------------------------------
+  nginx-ssl-proxy:
+    image: nginx:1.27-alpine
+    container_name: mcp-nginx-proxy
+    restart: always
+    depends_on:
+      - imanage-mcp
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/certs:/etc/nginx/certs:ro
+    networks:
+      - mcp-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  # --------------------------------------------------------------------------
+  # [확장 예시] 추후 다른 MCP 서버(예: LPS DB MCP 등)를 같은 서버에 추가할 때 주석 해제
+  # --------------------------------------------------------------------------
+  # lps-db-mcp:
+  #   build:
+  #     context: ../LPS-DB-MCP-SERVER
+  #   container_name: lps-db-mcp
+  #   restart: always
+  #   env_file:
+  #     - ../LPS-DB-MCP-SERVER/.env
+  #   ports:
+  #     - "127.0.0.1:3002:3002"
+  #   networks:
+  #     - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge

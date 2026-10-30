@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "imanage-onprem-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "C:/Users/ihjung/IMANAGE-MCP-SERVER/server.js"
+      ]
+    }
+  }
+}
+

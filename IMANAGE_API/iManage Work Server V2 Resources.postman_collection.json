@@ -1,0 +1,2535 @@
+{
+  "info": {
+    "_postman_id": "f1d188b4-f6a2-42b5-8e5f-90818b1f2fae",
+    "name": "iManage Work Server V2 Resources",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "11975842"
+  },
+  "item": [
+    {
+      "name": "Work",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Oauth2 Password Grant Login",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"authToken\", jsonData.access_token);",
+                      "pm.environment.set(\"refreshToken\", jsonData.refresh_token);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "{{clientId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "{{clientSecret}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "acase@ajubalaw.com",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrlPrefix}}/oauth2/token",
+                  "host": [
+                    "{{authUrlPrefix}}"
+                  ],
+                  "path": [
+                    "oauth2",
+                    "token"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"authToken\", jsonData.access_token);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "grant_type",
+                      "value": "refresh_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{refreshToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "d7faf138-1f20-4460-8a38-663c004253d7",
+                      "type": "text"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "nmqo93lv5ljvp46g3k41t9kteqf4rik",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{authUrlPrefix}}/oauth2/token",
+                  "host": [
+                    "{{authUrlPrefix}}"
+                  ],
+                  "path": [
+                    "oauth2",
+                    "token"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Discovery",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"customerId\", jsonData.data.user.customer_id);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Documents",
+          "item": [
+            {
+              "name": "Get Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/documents",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "documents"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Checked Out Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/checked-out",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "checked-out"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Checked Out Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/checked-out",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "checked-out"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Recent Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/recent-documents",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "recent-documents"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Recent Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/recent-documents",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "recent-documents"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Download Document",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/download",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "download"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Download Document With Filename",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/download/fileName.txt",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "download",
+                    "fileName.txt"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document NVP",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/name-value-pairs",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "name-value-pairs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document History",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/history",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "history"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document Version History",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/history/versions",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "history",
+                    "versions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document Activity History",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/history/activities",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "history",
+                    "activities"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document User History",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/history/users",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "history",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document Highlights",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/highlights",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "highlights"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Document Operations",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{documentId}}/operations",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{documentId}}",
+                    "operations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Upload Document To Folder",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"createdDocumentId\", jsonData.data.id);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "content-type",
+                    "value": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "profile",
+                      "type": "file",
+                      "value": null
+                    },
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{createdFolderId}}/documents",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{createdFolderId}}",
+                    "documents"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Upload New Document Version",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "content-type",
+                    "value": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "profile",
+                      "type": "file",
+                      "value": null
+                    },
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{createdDocumentId}}/versions",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{createdDocumentId}}",
+                    "versions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Checkout Document",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appname\" : \"pdfDocs\",\n  \"comments\": \"test.\",\n  \"due_date\": \"2018-08-18T04:46:00Z\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{createdDocumentId}}/checkout",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{createdDocumentId}}",
+                    "checkout"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Document Version",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "profile",
+                      "type": "file",
+                      "value": null
+                    },
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{createdDocumentId}}/file",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{createdDocumentId}}",
+                    "file"
+                  ]
+                },
+                "description": "Generated from a curl request: \ncurl -X POST \\\n  https://wrtest2.imanage.com/api/v1/folders/Active%21108/documents \\\n  -H 'cache-control: no-cache' \\\n  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \\\n  -H 'postman-token: 356b3308-4185-36ff-d5a7-d3299312313d' \\\n  -H 'x-client-id: f3009e33-a188-4017-a481-6fbf35c9fc5a' \\\n  -H 'x-client-version: 1.0.0.0' \\\n  -F profile=undefined \\\n  -F file=undefined"
+              },
+              "response": []
+            },
+            {
+              "name": "Patch Document",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\" : \"Updated Name Field\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{createdDocumentId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{createdDocumentId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Remove Document Lock",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"value\",\n  \"value\": [true, false, 123, \"123\", {\"abc\":\"123\", \"def\":[]}]\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{createdDocumentId}}/lock",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{createdDocumentId}}",
+                    "lock"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Document",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"value\",\n  \"value\": [true, false, 123, \"123\", {\"abc\":\"123\", \"def\":[]}]\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/documents/{{createdDocumentId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "documents",
+                    "{{createdDocumentId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Workspaces",
+          "item": [
+            {
+              "name": "Get Library Workspaces",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspaces",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/workspaces",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "workspaces"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{workspaceId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{workspaceId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace NVP",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{workspaceId}}/name-value-pairs",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{workspaceId}}",
+                    "name-value-pairs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace Children",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{workspaceId}}/children",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{workspaceId}}",
+                    "children"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace Operations",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{workspaceId}}/operations",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{workspaceId}}",
+                    "operations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace Security",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{workspaceId}}/security",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{workspaceId}}",
+                    "security"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace User Security",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/ACTIVE/workspaces",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "ACTIVE",
+                    "workspaces"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Workspace Users",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{workspaceId}}/users/search",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{workspaceId}}",
+                    "users",
+                    "search"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Workspace",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"createdWorkspaceId\", jsonData.data.id);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Demo Workspace\",\n  \"description\": \"Workspace Created For Demo Purposes\",\n  \"default_security\": \"public\"\n}\n"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Workspace Tab",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\" : \"Created Tab\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{createdWorkspaceId}}/tabs",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{createdWorkspaceId}}",
+                    "tabs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Workspace Folder",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.environment.set(\"createdFolderId\", jsonData.data.id);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\" : \"Created Folder\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{createdWorkspaceId}}/folders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{createdWorkspaceId}}",
+                    "folders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Workspace Search Folder Copy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\":\"Demo Search Folder\",\n\t\"default_security\":\"inherit\",\n\t\"searchprofile\":{\n\t\t\"name\":\"Search Parameter\",\n\t\t\"documents_only\":\"true\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{createdWorkspaceId}}/search-folders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{createdWorkspaceId}}",
+                    "search-folders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch Workspace",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\" : \"Updated Name Field\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{createdWorkspaceId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{createdWorkspaceId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Workspace",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"value\",\n  \"value\": [true, false, 123, \"123\", {\"abc\":\"123\", \"def\":[]}]\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/workspaces/{{createdWorkspaceId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "workspaces",
+                    "{{createdWorkspaceId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Folders",
+          "item": [
+            {
+              "name": "Get Folders",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/folders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "folders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Folders",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Folder Children",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{folderId}}/children",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{folderId}}",
+                    "children"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Folder NVP",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{folderId}}/name-value-pairs",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{folderId}}",
+                    "name-value-pairs"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Folder Operations",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{folderId}}/operations",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{folderId}}",
+                    "operations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Folder Security",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{folderId}}/security",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{folderId}}",
+                    "security"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Folder Documents",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{folderId}}/documents",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{folderId}}",
+                    "documents"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch Folder",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\": \"Updated Folder Name\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{createdFolderId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{createdFolderId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Folder",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var jsonData = JSON.parse(responseBody);",
+                      "pm.globals.set(\"folderId\", jsonData.id);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Demo Folder\",\n  \"description\" : \"Folder Created For Demo Purposes\",\n  \"location\" : \"Demoville\",\n  \"default_security\": \"public\",\n  \"profile\": {\n    \"class\": \"A-NOTE\",\n    \"custom1\": \"1077\",\n    \"custom2\": \"4\"\n  },\n  \"is_external\" : false,\n  \"is_external_as_normal\" : false,\n  \"is_container_saved_search\" : false,\n  \"is_content_saved_search\" : false\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/Active/workspaces/{{createdWorkspaceId}}/folders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "Active",
+                    "workspaces",
+                    "{{createdWorkspaceId}}",
+                    "folders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Folder Subfolders",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Demo Sub Folder\",\n  \"description\" : \"Sub Folder Created For Demo Purposes\",\n  \"location\" : \"Demoville\",\n  \"default_security\": \"public\",\n  \"profile\": {\n    \"class\": \"A-NOTE\",\n    \"custom1\": \"1077\",\n    \"custom2\": \"4\"\n  },\n  \"is_external\" : false,\n  \"is_external_as_normal\" : false,\n  \"is_container_saved_search\" : false,\n  \"is_content_saved_search\" : false\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{createdFolderId}}/subfolders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{createdFolderId}}",
+                    "subfolders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Folder Search Folders",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"name\":\"Demo Sub Search Folder\",\n\t\"default_security\":\"inherit\",\n\t\"searchprofile\":{\n\t\t\"name\":\"Search Parameter\",\n\t\t\"documents_only\":\"true\"\n\t}\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/folders/{{folderId}}/search-folders",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "folders",
+                    "{{folderId}}",
+                    "search-folders"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Customs",
+          "item": [
+            {
+              "name": "Get Custom 1 Recent",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/custom1/recent",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "custom1",
+                    "recent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Library Custom 1",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/customs/custom1",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "customs",
+                    "custom1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Custom 1 Recent",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/custom1/recent",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "custom1",
+                    "recent"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Custom 1",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/custom1/{{custom1Id}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "custom1",
+                    "{{custom1Id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Custom 1 To Custom 2",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/custom1/{{custom1Id}}/custom2/{{custom2Id}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "custom1",
+                    "{{custom1Id}}",
+                    "custom2",
+                    "{{custom2Id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Library Custom 1 To Custom Search 2",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/customs/custom1/{{custom1Id}}/custom2/search",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "customs",
+                    "custom1",
+                    "{{custom1Id}}",
+                    "custom2",
+                    "search"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Custom Values",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/customs/{{customTable}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "customs",
+                    "{{customTable}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Custom Values Search",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/customs/{{customTable}}/search",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "customs",
+                    "{{customTable}}",
+                    "search"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "My Favorites",
+          "item": [
+            {
+              "name": "Get My Favorites Children",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/my-favorites/children",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "my-favorites",
+                    "children"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create My Favorites Shortcut",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"id\":\"{{createdDocumentId}}\",\n\t\"name\":\"Generated Favorites Shortcut\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/my-favorites/shortcuts",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "my-favorites",
+                    "shortcuts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "My Matters",
+          "item": [
+            {
+              "name": "Get My Matters Children",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users/{{userId}}/my-matters/children",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users",
+                    "{{userId}}",
+                    "my-matters",
+                    "children"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Matters Security",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users/{{userId}}/my-matters/security",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users",
+                    "{{userId}}",
+                    "my-matters",
+                    "security"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Matters Subscriptions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users/{{userId}}/my-matters/subscriptions",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users",
+                    "{{userId}}",
+                    "my-matters",
+                    "subscriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Matters Available Subscriptions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users/{{userId}}/my-matters/available-subscriptions",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users",
+                    "{{userId}}",
+                    "my-matters",
+                    "available-subscriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create My Matters Subscription",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userid\": \"{{subscriptionUserId}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users/{{userId}}/my-matters/subscriptions",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users",
+                    "{{userId}}",
+                    "my-matters",
+                    "subscriptions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create My Matters Shortcut",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"id\":\"{{createdWorkspaceId}}\",\n\t\"name\":\"Generated Workspace Shortcut\"\n}"
+                },
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users/{{userId}}/my-matters/shortcuts",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users",
+                    "{{userId}}",
+                    "my-matters",
+                    "shortcuts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Captions",
+          "item": [
+            {
+              "name": "Get Captions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/captions",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "captions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Caption",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/captions/{{captionId}}",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "captions",
+                    "{{captionId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Get Library Users",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/users",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Trustees",
+          "item": [
+            {
+              "name": "Get Trustees",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-Auth-Token",
+                    "value": "{{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlPrefix}}/api/v2/customers/{{customerId}}/libraries/{{libraryName}}/trustees",
+                  "host": [
+                    "{{urlPrefix}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "customers",
+                    "{{customerId}}",
+                    "libraries",
+                    "{{libraryName}}",
+                    "trustees"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "authToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

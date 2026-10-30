@@ -1,0 +1,20 @@
+{
+  "name": "imanage-mcp-server",
+  "version": "1.0.0",
+  "description": "iManage Work Server V2 On-Premise MCP 서버 (사용자별 권한 분리, 문서 텍스트 추출/다운로드/링크 제공, Gemini Enterprise 및 ChatGPT 호환)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:http": "node server.js --http",
+    "inspector": "npx @modelcontextprotocol/inspector node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "dotenv": "^16.5.0",
+    "mammoth": "^1.9.0",
+    "pdf-parse": "^1.1.1",
+    "zod": "^3.24.3"
+  }
+}
+

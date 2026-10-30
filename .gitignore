@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+downloads/
+data/
+logs/
+*.key
+.imanage-mcp-secret.key
+docker/certs/*.pem
+docker/certs/*.pfx
+docker/certs/*.crt
+*.log
+
+
